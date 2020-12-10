@@ -1,13 +1,14 @@
-import React from "react";
-import { connect } from "react-redux";
-
-import { selectCollection } from "../../redux/shop/shop.selectors.js";
+import React, { useContext } from "react";
 
 import CollectionItem from "../../components/collection-item/collection-item.component";
 
+import CollectionsContext from "../../contexts/collections/collections.context.js";
+
 import "./collection.styles.scss";
 
-const CollectionPage = ({ collection }) => {
+const CollectionPage = ({ match }) => {
+  const collections = useContext(CollectionsContext);
+  const collection = collections[match.params.collectionId];
   const { title, items } = collection;
   return (
     <div className="collection-page">
@@ -21,11 +22,4 @@ const CollectionPage = ({ collection }) => {
   );
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  // ownProps: props of the component we're wrapping in connect()
-  collection: selectCollection(ownProps.match.params.collectionId)(state),
-  // selectCollection: a func that returns a func ("currying"), i.e. createSelector(),
-  // which takes "state" as an arg.
-});
-
-export default connect(mapStateToProps)(CollectionPage);
+export default CollectionPage;
